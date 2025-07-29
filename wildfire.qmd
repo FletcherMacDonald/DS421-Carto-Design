@@ -84,19 +84,11 @@ This dataset contains point geometries where fires were detected. Important colu
 Use ggplot to create a line plot of fires with the day on the x axis and number of fires on the y axis
 
 ```{r}
-# Load required packages
-library(sf)
-library(dplyr)
-library(tidyr)
-library(ggplot2)
 
-# Set working directory
 setwd("/Users/fletchermacdonald/Documents/DS421-Carto-Design")
 
-# Read the shapefile
 fire_data <- st_read("data/LANDSAT_USA_contiguous_and_Hawaii_7d/LANDSAT_USA_contiguous_and_Hawaii_7d.shp")
 
-# Check column names and data
 print("Column names:")
 print(names(fire_data))
 print("Summary of LATITUDE and LONGITUDE:")
@@ -105,16 +97,13 @@ summary(fire_data$LONGITUDE)
 print("Sample of ACQ_DATE:")
 head(fire_data$ACQ_DATE)
 
-# Filter for Hawaii with broader bounds
 hawaii_fires <- fire_data %>%
-  filter(LATITUDE >= 18 & LATITUDE <= 23 & LONGITUDE >= -162 & LONGITUDE <= -154) %>% # Broader Hawaii bounds
-  mutate(date = as.Date(ACQ_DATE, format = "%Y-%m-%d")) # Explicit date format
+  filter(LATITUDE >= 18 & LATITUDE <= 23 & LONGITUDE >= -162 & LONGITUDE <= -154) %>%
+  mutate(date = as.Date(ACQ_DATE, format = "%Y-%m-%d")) 
 
-# Check if any data remains after filtering
 print("Number of rows after filtering for Hawaii:")
 print(nrow(hawaii_fires))
 
-# If no data, provide warning and use sample data
 if (nrow(hawaii_fires) == 0) {
   message("Warning: No fire detections found in Hawaii. Using sample data for demonstration.")
   hawaii_fires <- data.frame(
@@ -130,10 +119,10 @@ if (nrow(hawaii_fires) == 0) {
              fill = list(fire_count = 0))
 }
 
-# Create the line plot
+
 ggplot(data = hawaii_fires, aes(x = date, y = fire_count)) +
-  geom_line(color = "#D81B60", size = 1.2) + # Red-pink for clarity
-  geom_point(color = "#D81B60", size = 3) + # Points for emphasis
+  geom_line(color = "#D81B60", size = 1.2) + 
+  geom_point(color = "#D81B60", size = 3) + 
   labs(
     title = "Number of Fire Detections in Hawaii by Day (7-Day Period)",
     x = "Date",
@@ -146,7 +135,8 @@ ggplot(data = hawaii_fires, aes(x = date, y = fire_count)) +
     axis.text = element_text(size = 10),
     axis.text.x = element_text(angle = 45, hjust = 1)
   ) +
-  scale_x_date(date_breaks = "1 day", date_labels = "%b %d")yeYes
+  scale_x_date(date_breaks = "1 day", date_labels = "%b %d")
+
 ```
 
 ------------------------------------------------------------------------
@@ -223,7 +213,6 @@ mapboxgl(style = mapbox_style("dark"), bounds = wildfire_shp_data) |>
 ```{r}
 usa <- ne_states(country = "united states of america", returnclass = "sf")
 
-# Plot animated wildfire data
 p <- ggplot() +
   geom_sf(data = usa, fill = "grey95", color = "white") +
   geom_point(
@@ -276,9 +265,9 @@ wildfire_area_data <- st_read(
 )
 
 wildfire_area_data <- wildfire_area_data |>
-  st_zm(drop = TRUE, what = "ZM") |>  # Remove Z/M dimension if present
-  st_make_valid() |>                  # Ensure geometry is valid
-  st_transform(4326)                  # Project to WGS84 for mapping
+  st_zm(drop = TRUE, what = "ZM") |> 
+  st_make_valid() |>                  
+  st_transform(4326)                  
 
 leaflet(wildfire_area_data) |>
   addProviderTiles("CartoDB.DarkMatter") |>
