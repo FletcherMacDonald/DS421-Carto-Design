@@ -2,6 +2,9 @@ library(shiny)
 library(mapgl)
 library(sf)
 
+library(here)
+addResourcePath('custom_www', here("www"))
+
 
 
 
