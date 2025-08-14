@@ -2,12 +2,12 @@ library(shiny)
 library(mapgl)
 library(sf)
 
-# Define the custom path to the www folder
+
 www_path <- file.path(Sys.getenv("HOME"), "Documents", "DS421-Carto-Design", "www")
-# Add resource path to serve files from the custom www folder
+
 addResourcePath("custom_www", www_path)
 
-# Education journey data
+
 journey <- data.frame(
   section_id = c("sec1", "sec2", "sec3", "sec4", "sec5"),
   name = c(
@@ -24,7 +24,7 @@ journey <- data.frame(
   stringsAsFactors = FALSE
 )
 
-# Check if image files exist (for debugging)
+
 for (img in journey$image) {
   if (!file.exists(file.path(www_path, img))) {
     warning(paste("Image file not found:", file.path(www_path, img)))
@@ -33,26 +33,26 @@ for (img in journey$image) {
 
 journey_sf <- st_as_sf(journey, coords = c("lon", "lat"), crs = 4326)
 
-# Create single path: Keiraville -> Bellambi -> Sydney -> Texas -> Hawaii
+
 coords <- rbind(
-  st_coordinates(journey_sf[1:3, ]), # Keiraville, Bellambi, Sydney
-  c(165, -20), # Intermediate point 1 in the Pacific, near Australia
-  c(-150, 0), # Intermediate point 2 in the Pacific, west of antimeridian
-  st_coordinates(journey_sf[4, ]), # Texas
-  c(-115, 30), # Intermediate point 3 in the Pacific
-  c(-135, 25), # Intermediate point 4 in the Pacific
-  st_coordinates(journey_sf[5, ]) # Hawaii
+  st_coordinates(journey_sf[1:3, ]), 
+  c(165, -20), 
+  c(-150, 0), 
+  st_coordinates(journey_sf[4, ]), 
+  c(-115, 30), 
+  c(-135, 25), 
+  st_coordinates(journey_sf[5, ]) 
 )
 path_sf <- st_sf(geometry = st_sfc(st_linestring(coords), crs = 4326))
 
-# Debug path coordinates
+
 cat("Path coordinates:\n")
 print(coords)
 
-# UI
+
 ui <- fluidPage(
   tags$link(href = "https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap", rel = "stylesheet"),
-  # Debug output to list files in custom www folder
+  
   verbatimTextOutput("debug"),
   story_map(
     map_id = "map",
@@ -97,9 +97,9 @@ ui <- fluidPage(
   )
 )
 
-# Server
+
 server <- function(input, output, session) {
-  # Debug output to list files in custom www folder
+
   output$debug <- renderPrint({
     list.files(www_path, pattern = "\\.(png|jpg|jpeg|webp|svg)$", full.names = TRUE)
   })
