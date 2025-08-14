@@ -67,35 +67,35 @@ ui <- fluidPage(
         title = journey$name[1],
         content = list(
           p(journey$years[1]),
-          img(src = file.path("custom_www", journey$image[1]), width = "300px")
+          img(src = "Keiraville.png", width = "300px")
         )
       ),
       "sec2" = story_section(
         title = journey$name[2],
         content = list(
           p(journey$years[2]),
-          img(src = file.path("custom_www", journey$image[2]), width = "300px")
+          img(src = "holy.png", width = "300px")
         )
       ),
       "sec3" = story_section(
         title = journey$name[3],
         content = list(
           p(journey$years[3]),
-          img(src = file.path("custom_www", journey$image[3]), width = "300px")
+          img(src = "newo.png", width = "300px")
         )
       ),
       "sec4" = story_section(
         title = journey$name[4],
         content = list(
           p(journey$years[4]),
-          img(src = file.path("custom_www", journey$image[4]), width = "300px")
+          img(src = "lcu.png", width = "300px")
         )
       ),
       "sec5" = story_section(
         title = journey$name[5],
         content = list(
           p(journey$years[5]),
-          img(src = file.path("custom_www", journey$image[5]), width = "300px")
+          img(src = "cham.png", width = "300px")
         )
       )
     )
